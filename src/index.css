@@ -1,0 +1,189 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background: #f0f4f8;
+  color: #333;
+}
+
+/* Main container */
+.app {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Title styling */
+.app h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+/* Loader styling */
+.loader {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+/* Input styling */
+input[type="text"] {
+  width: 100%;
+  max-width: 500px;
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Results list */
+.Results h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Weather forecast container */
+.weather {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Weather day card */
+.day {
+  background: #fff;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 120px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.day:hover {
+  transform: translateY(-5px);
+}
+
+/* Weather icon */
+.day span {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* Day text and temperature */
+.day p {
+  margin: 5px 0;
+}
+
+/* Weather header for current weather */
+.weather h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+/* Current temperature info */
+.weather h3 {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: #444;
+}
+
+/* Results list styling */
+li {
+  cursor: pointer;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+}
+
+li:hover {
+  background-color: #f9f9f9;
+}
+
+.chartContainer {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.button {
+  display: block;
+  background: linear-gradient(to right, #3498db, #2980b9);
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 1rem;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin: 10px auto;
+}
+
+.button:hover {
+  background: linear-gradient(to right, #2980b9, #3498db);
+  transform: translateY(-2px);
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+}
+
+.weatherHeader {
+  text-align: center;
+}
+
+/* Responsive adjustments for small devices */
+@media (max-width: 600px) {
+  .app {
+    padding: 10px;
+  }
+
+  .app h1 {
+    font-size: 2rem;
+  }
+
+  input[type="text"] {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .day {
+    width: 100px;
+    margin: 8px;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .day span {
+    font-size: 1.5rem;
+  }
+
+  .weather h2 {
+    font-size: 1.5rem;
+  }
+
+  .weather h3 {
+    font-size: 1.2rem;
+  }
+
+  .chartContainer {
+    width: 100%;
+  }
+}
