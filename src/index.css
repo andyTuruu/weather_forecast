@@ -1,3 +1,15 @@
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2980b9;
+  --text-color: #333;
+  --background-color: #f0f4f8;
+  --border-color: #ccc;
+  --loader-color: #666;
+  --card-bg: #fff;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.2s;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -6,8 +18,8 @@ body {
   margin: 0;
   padding: 0;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  background: #f0f4f8;
-  color: #333;
+  background: var(--background-color);
+  color: var(--text-color);
 }
 
 /* Main container */
@@ -28,7 +40,7 @@ body {
 .loader {
   text-align: center;
   font-size: 1.2rem;
-  color: #666;
+  color: var(--loader-color);
 }
 
 /* Input styling */
@@ -38,7 +50,7 @@ input[type="text"] {
   display: block;
   margin: 0 auto 20px;
   padding: 10px 15px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 1rem;
 }
@@ -65,14 +77,14 @@ ul {
 
 /* Weather day card */
 .day {
-  background: #fff;
+  background: var(--card-bg);
   margin: 10px;
   padding: 15px;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
   width: 120px;
   text-align: center;
-  transition: transform 0.2s;
+  transition: transform var(--transition-speed);
 }
 
 .day:hover {
@@ -98,7 +110,6 @@ ul {
   margin-bottom: 15px;
 }
 
-/* Current temperature info */
 .weather h3 {
   text-align: center;
   font-size: 1.4rem;
@@ -117,14 +128,20 @@ li:hover {
   background-color: #f9f9f9;
 }
 
+/* Chart container */
 .chartContainer {
   width: 90%;
   margin: 0 auto;
 }
 
+/* Button styling */
 .button {
   display: block;
-  background: linear-gradient(to right, #3498db, #2980b9);
+  background: linear-gradient(
+    to right,
+    var(--primary-color),
+    var(--secondary-color)
+  );
   border: none;
   border-radius: 4px;
   color: #fff;
@@ -136,7 +153,11 @@ li:hover {
 }
 
 .button:hover {
-  background: linear-gradient(to right, #2980b9, #3498db);
+  background: linear-gradient(
+    to right,
+    var(--secondary-color),
+    var(--primary-color)
+  );
   transform: translateY(-2px);
 }
 
