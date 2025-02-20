@@ -1,228 +1,26 @@
 import { useState, useEffect, useMemo } from "react";
-import countries from "i18n-iso-countries";
-import enLocale from "i18n-iso-countries/langs/en.json";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
-
-// Register the locale
-countries.registerLocale(enLocale);
-// Direct mapping of weather codes to icons
-const weatherIconMap = {
-  0: "☀️",
-  1: "🌤",
-  2: "⛅️",
-  3: "☁️",
-  45: "🌫",
-  48: "🌫",
-  51: "🌦",
-  56: "🌦",
-  61: "🌦",
-  66: "🌦",
-  80: "🌦",
-  53: "🌧",
-  55: "🌧",
-  63: "🌧",
-  65: "🌧",
-  57: "🌧",
-  67: "🌧",
-  81: "🌧",
-  82: "🌧",
-  71: "🌨",
-  73: "🌨",
-  75: "🌨",
-  77: "🌨",
-  85: "🌨",
-  86: "🌨",
-  95: "🌩",
-  96: "⛈",
-  99: "⛈",
-};
-
-function ForecastChart({ data, tempUnit }) {
-  return (
-    <div className="chartContainer">
-      <ResponsiveContainer width="100%" height={420}>
-        <LineChart
-          data={data}
-          margin={{ top: 50, right: 30, left: 0, bottom: 0 }}
-        >
-          <XAxis dataKey="date" />
-          <YAxis
-            label={{
-              value: `Temp (${tempUnit})`,
-              angle: -90,
-              position: "insideLeft",
-            }}
-            tickCount={8}
-          />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="high" stroke="#e74c3c" name="High" />
-          <Line type="monotone" dataKey="low" stroke="#3498db" name="Low" />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
-  );
-}
-
-function getWeatherIcon(wmoCode) {
-  return weatherIconMap[wmoCode] || "NOT FOUND";
-}
-
-function convertToFlag(countryCode) {
-  const codePoints = countryCode
-    .toUpperCase()
-    .split("")
-    .map((char) => 127397 + char.charCodeAt());
-  return String.fromCodePoint(...codePoints);
-}
-
-function formatDay(dateStr, isWeekdayIncluded = true) {
-  const options = {
-    month: "numeric",
-    day: "numeric",
-  };
-
-  if (isWeekdayIncluded) {
-    options.weekday = "short";
-  }
-
-  return new Intl.DateTimeFormat("en", options).format(
-    new Date(dateStr + "T00:00:00")
-  );
-}
-
-// Helper: Convert Fahrenheit to Celsius
-function convertFtoC(f) {
-  return Math.round(((f - 32) * 5) / 9);
-}
-
-function convertAlpha3ToAlpha2(alpha3) {
-  return countries.alpha3ToAlpha2(alpha3);
-}
-
-function Input({ location, onChangeLocation }) {
-  return (
-    <div>
-      <input
-        type="text"
-        placeholder="Search for a location..."
-        value={location}
-        onChange={onChangeLocation}
-      />
-    </div>
-  );
-}
-
-function Results({ locations, handleSelection }) {
-  return (
-    <div>
-      {locations.length > 0 && <h2>Choose Your Location</h2>}
-      <ul>
-        {locations.map((loc) => (
-          <Result
-            key={loc.id}
-            location={loc}
-            onClick={() => handleSelection(loc)}
-          />
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function Result({ location, onClick }) {
-  // Always include name and country, and conditionally include admin levels
-  const parts = [location.name];
-  if (location.admin3) parts.push(location.admin3);
-  if (location.admin2) parts.push(location.admin2);
-  if (location.admin1) parts.push(location.admin1);
-  parts.push(location.country);
-
-  return (
-    <li onClick={onClick} style={{ cursor: "pointer" }}>
-      {parts.join(", ")}
-    </li>
-  );
-}
-
-function Weather({ weather, location, tempUnit }) {
-  const {
-    temperature_2m_max: max,
-    temperature_2m_min: min,
-    time: dates,
-    weather_code: codes,
-  } = weather[0];
-  const { apparent_temperature: feel, temperature_2m: now } = weather[1];
-
-  // Convert current temperature if necessary
-  const currentTemp = tempUnit === "F" ? Math.round(now) : convertFtoC(now);
-  const currentFeel = tempUnit === "F" ? Math.round(feel) : convertFtoC(feel);
-
-  //   Create an array of objects for the chart
-  const chartData = dates.map((date, i) => ({
-    date: formatDay(date, false),
-    high: tempUnit === "F" ? Math.round(max[i]) : convertFtoC(max[i]),
-    low: tempUnit === "F" ? Math.round(min[i]) : convertFtoC(min[i]),
-  }));
-
-  return (
-    <>
-      <div className="weatherHeader">
-        <h2>Weather {location}</h2>
-        <h3>
-          The air temperature is {currentTemp}&deg;{tempUnit}. It feels like{" "}
-          {currentFeel}&deg;{tempUnit}.
-        </h3>
-      </div>
-      <ul className="weather">
-        {dates.map((date, i) => (
-          <Day
-            key={date}
-            date={date}
-            max={tempUnit === "F" ? Math.round(max[i]) : convertFtoC(max[i])}
-            min={tempUnit === "F" ? Math.round(min[i]) : convertFtoC(min[i])}
-            code={codes[i]}
-            isToday={i === 0}
-            tempUnit={tempUnit}
-          />
-        ))}
-      </ul>
-      <ForecastChart data={chartData} tempUnit={tempUnit} />
-    </>
-  );
-}
-
-function Day({ date, max, min, code, isToday, tempUnit }) {
-  return (
-    <li className="day">
-      <span>{getWeatherIcon(code)}</span>
-      <p>{isToday ? "Today" : formatDay(date, true)}</p>
-      <p>
-        H: {max}&deg;{tempUnit}
-        <br />
-        L: {min}&deg;{tempUnit}
-      </p>
-    </li>
-  );
-}
+import Input from "./Input";
+import Results from "./Results";
+import Weather from "./Weather";
+import { convertToFlag, convertAlpha3ToAlpha2 } from "./utils";
 
 export default function App() {
   const [location, setLocation] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [weather, setWeather] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [tempUnit, setTempUnit] = useState("F");
   const [position, setPosition] = useState({});
   const [error, setError] = useState(null);
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [isWeatherLoading, setIsWeatherLoading] = useState(false);
+  const [isReverseGeocodeLoading, setIsReverseGeocodeLoading] = useState(false);
+  const [isGeoLoading, setIsGeoLoading] = useState(false);
+  const isAnyLoading =
+    isSearchLoading ||
+    isWeatherLoading ||
+    isReverseGeocodeLoading ||
+    isGeoLoading;
 
   // On mount, load any stored location from localStorage
   useEffect(() => {
@@ -239,17 +37,17 @@ export default function App() {
         setSearchResults([]);
         return;
       }
-      setIsLoading(true);
+      setIsSearchLoading(true);
       try {
         const response = await fetch(
-          `https://geocoding-api.open-meteo.com/v1/search?name=${location}`
+          `https://geocoding-api.open-meteo.com/v1/search?name=${location}&count=20&language=en`
         );
         const data = await response.json();
         setSearchResults(data.results || []);
       } catch (error) {
         console.error("Error fetching locations:", error);
       } finally {
-        setIsLoading(false);
+        setIsSearchLoading(false);
       }
     }
     fetchLocations();
@@ -261,7 +59,7 @@ export default function App() {
       const { latitude, longitude, timezone } = selectedLocation;
       // Default to "auto" if timezone is missing
       const tz = timezone || "auto";
-      setIsLoading(true);
+      setIsWeatherLoading(true);
       try {
         const response = await fetch(
           `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&timezone=${tz}&temperature_unit=fahrenheit&current=temperature_2m,apparent_temperature&daily=weather_code,temperature_2m_max,temperature_2m_min&forecast_days=14`
@@ -271,7 +69,7 @@ export default function App() {
       } catch (error) {
         console.error("Error fetching weather data:", error);
       } finally {
-        setIsLoading(false);
+        setIsWeatherLoading(false);
       }
     }
     fetchWeather();
@@ -280,8 +78,8 @@ export default function App() {
   useEffect(() => {
     async function fetchReverseGeocode() {
       const API_KEY = "lb-3yEOGYgSOS1g486jIg6i_X8wqAUZOiJGldRPuXjA";
-      setIsLoading(true);
       if (position.lat && position.lng) {
+        setIsReverseGeocodeLoading(true);
         try {
           const response = await fetch(
             `https://revgeocode.search.hereapi.com/v1/revgeocode?at=${position.lat},${position.lng}&lang=en-US&apiKey=${API_KEY}`
@@ -307,8 +105,10 @@ export default function App() {
         } catch (error) {
           console.error("Error fetching reverse geocode:", error);
         } finally {
-          setIsLoading(false);
+          setIsReverseGeocodeLoading(false);
         }
+      } else {
+        setIsReverseGeocodeLoading(false);
       }
     }
     fetchReverseGeocode();
@@ -351,6 +151,7 @@ export default function App() {
 
   async function handleCurrent() {
     try {
+      setIsGeoLoading(true);
       const pos = await getCurrentPositionAsync();
       setPosition({
         lat: pos.coords.latitude,
@@ -358,6 +159,8 @@ export default function App() {
       });
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsGeoLoading(false);
     }
   }
 
@@ -372,16 +175,16 @@ export default function App() {
           setSelectedLocation(null); // Reset selection when user types
         }}
       />
-      {!selectedLocation && !isLoading && (
+      {!selectedLocation && !isAnyLoading && (
         <button className="button" onClick={handleCurrent}>
           Use current location
         </button>
       )}
-      {isLoading && <p className="loader">Loading...</p>}
+      {isAnyLoading && <p className="loader">Loading...</p>}
       {location.length > 1 && !selectedLocation && (
         <Results locations={searchResults} handleSelection={handleSelection} />
       )}
-      {!isLoading && weather && selectedLocation && (
+      {!isAnyLoading && weather && selectedLocation && (
         <>
           <button className="button" onClick={toggleTempUnit}>
             Switch to {tempUnit === "F" ? "Celsius" : "Fahrenheit"}

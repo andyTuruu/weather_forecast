@@ -1,12 +1,12 @@
 :root {
-  --primary-color: #3498db;
-  --secondary-color: #2980b9;
-  --text-color: #333;
-  --background-color: #f0f4f8;
-  --border-color: #ccc;
-  --loader-color: #666;
-  --card-bg: #fff;
-  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --primary-color: #457b9d; /* Deep blue accent */
+  --secondary-color: #a8dadc; /* Soft pastel blue */
+  --text-color: #1d3557; /* Dark slate for text */
+  --background-color: #f1faee; /* Off-white background */
+  --border-color: #cce3de; /* Light, subtle border */
+  --loader-color: #90a4ae; /* Muted blue-grey for loaders */
+  --card-bg: #ffffff; /* White card background */
+  --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   --transition-speed: 0.2s;
 }
 
@@ -17,7 +17,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-family: "Nunito Sans", sans-serif;
   background: var(--background-color);
   color: var(--text-color);
 }
@@ -34,6 +34,7 @@ body {
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 20px;
+  color: var(--primary-color);
 }
 
 /* Loader styling */
@@ -59,6 +60,7 @@ input[type="text"] {
 .Results h2 {
   text-align: center;
   margin-bottom: 10px;
+  color: var(--secondary-color);
 }
 
 ul {
@@ -108,6 +110,7 @@ ul {
   text-align: center;
   font-size: 1.8rem;
   margin-bottom: 15px;
+  color: var(--primary-color);
 }
 
 .weather h3 {
@@ -121,16 +124,17 @@ ul {
 li {
   cursor: pointer;
   padding: 8px 12px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
 }
 
 li:hover {
-  background-color: #f9f9f9;
+  background-color: var(--secondary-color);
 }
 
 /* Chart container */
 .chartContainer {
   width: 90%;
+  height: 450px;
   margin: 0 auto;
 }
 
@@ -163,7 +167,7 @@ li:hover {
 
 .button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+  box-shadow: 0 0 0 2px var(--primary-color);
 }
 
 .weatherHeader {
@@ -206,5 +210,12 @@ li:hover {
 
   .chartContainer {
     width: 100%;
+  }
+}
+
+@media (max-width: 450px) {
+  .chartContainer {
+    height: auto;
+    aspect-ratio: 1;
   }
 }
