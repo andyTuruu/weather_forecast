@@ -5,13 +5,13 @@ A responsive weather forecast app built with React that provides a 14-day foreca
 ## Live Demo
 Check out the live demo here: 
 
-**[Common Currency Converter](https://fortnight-weather-forecast.netlify.app/)**
+**[Fortnight Weather Forecast](https://fortnight-weather-forecast.netlify.app/)**
 
-![FWF Preview](./FWF1.png)  
+![Forecast Preview](./2weeksWF1.png)  
 
-![FWF Converter Preview](./FWF2.png)  
+![Forecast Preview](./2weeksWF2.png)  
 
-![FWF Converter Preview](./FWF3.png)  
+![Forecast Preview](./2weeksWF3.png)  
 
 ## Features
 
